@@ -102,10 +102,12 @@ foreach ($_POST['assigned_groups'] as $group_id => $name) {
     ->from('ds_users_groups')
     ->where('user_id', '=', $user->user_id)
     ->execute();
-(new Query())
-    ->insert($group_insert)
-    ->into('ds_users_groups')
-    ->execute();
+if ($group_insert) {
+    (new Query())
+        ->insert($group_insert)
+        ->into('ds_users_groups')
+        ->execute();
+}
 
 /**
  * Log the event

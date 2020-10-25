@@ -82,10 +82,12 @@ foreach ($_POST['assigned_permissions'] as $permission_id => $name) {
     ->from('ds_groups_permissions')
     ->where('group_id', '=', $group->group_id)
     ->execute();
-(new Query())
-    ->insert($permission_insert)
-    ->into('ds_groups_permissions')
-    ->execute();
+if ($permission_insert) {
+    (new Query())
+        ->insert($permission_insert)
+        ->into('ds_groups_permissions')
+        ->execute();
+}
 
 /**
  * Log the event
