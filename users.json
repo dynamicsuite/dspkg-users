@@ -1,0 +1,131 @@
+{
+  "name": "Users",
+  "author": "Dynamic Suite Team",
+  "version": "1.0.0",
+  "description": "A package for managing users and permissions",
+  "license": "GPLv3",
+  "global": {
+    "autoload": [
+      "lib/"
+    ],
+    "init": [
+      "scripts/init.php"
+    ]
+  },
+  "local": {
+    "js": [
+      "js/users.min.js"
+    ],
+    "css": [
+      "css/users.min.css"
+    ]
+  },
+  "apis": {
+    "login": {
+      "entry": "apis/login.php",
+      "post": ["username", "password"],
+      "public": true
+    },
+    "users.list.read": {
+      "entry": "apis/users.list.read.php",
+      "permissions": [
+        "users:manage_users"
+      ]
+    },
+    "user.create.setup": {
+      "entry": "apis/user.create.setup.php",
+      "permissions": [
+        "users:manage_users"
+      ]
+    },
+    "user.create": {
+      "entry": "apis/user.create.php",
+      "post": ["username", "password_1", "password_2", "inactive"],
+      "permissions": [
+        "users:manage_users"
+      ]
+    },
+    "user.read": {
+      "entry": "apis/user.read.php",
+      "post": ["id"],
+      "permissions": [
+        "users:manage_users"
+      ]
+    },
+    "user.update": {
+      "entry": "apis/user.update.php",
+      "post": ["user_id", "username", "password_1", "password_2", "inactive"],
+      "permissions": [
+        "users:manage_users"
+      ]
+    },
+    "user.delete": {
+      "entry": "apis/user.delete.php",
+      "post": ["user_id"],
+      "permissions": [
+        "users:manage_users"
+      ]
+    },
+    "groups.list.read": {
+      "entry": "apis/groups.list.read.php",
+      "permissions": [
+        "users:manage_groups"
+      ]
+    },
+    "group.create.setup": {
+      "entry": "apis/group.create.setup.php",
+      "permissions": [
+        "users:manage_groups"
+      ]
+    },
+    "group.create": {
+      "entry": "apis/group.create.php",
+      "post": ["name", "description"],
+      "permissions": [
+        "users:manage_groups"
+      ]
+    },
+    "group.read": {
+      "entry": "apis/group.read.php",
+      "post": ["id"],
+      "permissions": [
+        "users:manage_groups"
+      ]
+    },
+    "group.update": {
+      "entry": "apis/group.update.php",
+      "post": ["group_id", "name", "description"],
+      "permissions": [
+        "users:manage_groups"
+      ]
+    },
+    "group.delete": {
+      "entry": "apis/group.delete.php",
+      "post": ["group_id"],
+      "permissions": [
+        "users:manage_groups"
+      ]
+    }
+  },
+  "views": {
+    "/login": {
+      "entry": "views/login.php",
+      "title": "Login",
+      "public": true,
+      "hide_nav": true,
+      "navigable": false
+    },
+    "/users": {
+      "entry": "views/users.php",
+      "title": "Local Users",
+      "nav_name": "Local Users",
+      "nav_icon": "fas fa-users"
+    },
+    "/groups": {
+      "entry": "views/groups.php",
+      "title": "Permission Groups",
+      "nav_name": "Permission Groups",
+      "nav_icon": "fas fa-user-shield"
+    }
+  }
+}
