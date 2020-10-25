@@ -20,6 +20,12 @@
       "css/users.min.css"
     ]
   },
+  "nav_groups": {
+    "maintenance": {
+      "name": "Maintenance",
+      "icon": "fas fa-cogs"
+    }
+  },
   "apis": {
     "login": {
       "entry": "apis/login.php",
@@ -118,12 +124,14 @@
     "/users": {
       "entry": "views/users.php",
       "title": "Local Users",
+      "nav_group": "maintenance",
       "nav_name": "Local Users",
       "nav_icon": "fas fa-users"
     },
     "/groups": {
       "entry": "views/groups.php",
       "title": "Permission Groups",
+      "nav_group": "maintenance",
       "nav_name": "Permission Groups",
       "nav_icon": "fas fa-user-shield"
     }
