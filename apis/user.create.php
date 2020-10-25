@@ -85,10 +85,13 @@ foreach ($_POST['assigned_groups'] as $group_id => $name) {
         'group_id' => $group_id
     ];
 }
-(new Query())
-    ->insert($group_insert)
-    ->into('ds_users_groups')
-    ->execute();
+if ($group_insert) {
+    (new Query())
+        ->insert($group_insert)
+        ->into('ds_users_groups')
+        ->execute();
+}
+
 
 /**
  * Log the event

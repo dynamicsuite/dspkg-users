@@ -71,10 +71,12 @@ foreach ($_POST['assigned_permissions'] as $permission_id => $name) {
         'permission_id' => $permission_id
     ];
 }
-(new Query())
-    ->insert($permission_insert)
-    ->into('ds_groups_permissions')
-    ->execute();
+if ($permission_insert) {
+    (new Query())
+        ->insert($permission_insert)
+        ->into('ds_groups_permissions')
+        ->execute();
+}
 
 /**
  * Log the event
