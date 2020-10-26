@@ -19,13 +19,11 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 <template>
     <div class="users change-password">
         <div v-if="!error.server" class="ds-container">
-            <h1 v-if="page_data.password_expired">Password Expired</h1>
             <h3>Update Account Password</h3>
             <aui-input type="password" label="Password" :failure="error.password" v-model="form.password_1" />
             <aui-input type="password" label="Confirm Password" :failure="error.password" v-model="form.password_2" />
             <aui-button @click="changePassword" :loading="state.calling" loading_text="Updating...">Update</aui-button>
         </div>
-        <aui-notice v-else type="failure" icon="fas fa-exclamation-triangle">Server Error</aui-notice>
     </div>
 </template>
 
@@ -71,9 +69,6 @@ export default {
                 }
             });
         }
-    },
-    mounted() {
-        this.page_data = DynamicSuite.getPageData();
     }
 }
 </script>
