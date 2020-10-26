@@ -47,6 +47,9 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
                         v-model="form.password_2"
                     />
                 </div>
+                <aui-checkbox :checked="form.password_expired" :disabled="overlay" v-model="form.password_expired">
+                    Force change password at next login
+                </aui-checkbox>
                 <h2>Groups</h2>
                 <aui-select-assignment
                     :assigned.sync="form.assigned_groups"
@@ -78,8 +81,10 @@ export default {
                     'username',
                     'password_1',
                     'password_2',
+                    'password_expired',
                     'root',
                     'inactive',
+                    'inactive_by',
                     'inactive_on',
                     'login_last_attempt',
                     'login_last_success',

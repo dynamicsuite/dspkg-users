@@ -74,7 +74,12 @@ elseif ($user->login($_POST['password'])) {
     /**
      * Figure out where to redirect the user to since their login succeeded
      */
-    if (isset($_POST['redirect'])) {
+    if ($user->password_expired) {
+        $location = '/change-password';
+        if (isset($_POST['redirect'])) {
+            $location .= "?ref={$_POST['redirect']}";
+        }
+    } elseif (isset($_POST['redirect'])) {
         $location = $_POST['redirect'];
     } else {
         $location = Users::$cfg->login_post_view;

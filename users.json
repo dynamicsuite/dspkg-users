@@ -26,11 +26,25 @@
       "icon": "fas fa-cogs"
     }
   },
+  "action_groups": [
+    "users"
+  ],
+  "action_links": {
+    "current_name": {
+      "type": "dynamic",
+      "value": "actions/current_name.php",
+      "group": "users"
+    }
+  },
   "apis": {
     "login": {
       "entry": "apis/login.php",
       "post": ["username", "password"],
       "public": true
+    },
+    "change.password": {
+      "entry": "apis/change.password.php",
+      "post": ["password_1", "password_2"]
     },
     "users.list.read": {
       "entry": "apis/users.list.read.php",
@@ -46,7 +60,7 @@
     },
     "user.create": {
       "entry": "apis/user.create.php",
-      "post": ["username", "password_1", "password_2", "inactive"],
+      "post": ["username", "password_1", "password_2", "password_expired", "inactive"],
       "permissions": [
         "users:manage_users"
       ]
@@ -60,7 +74,7 @@
     },
     "user.update": {
       "entry": "apis/user.update.php",
-      "post": ["user_id", "username", "password_1", "password_2", "inactive"],
+      "post": ["user_id", "username", "password_1", "password_2", "password_expired", "inactive"],
       "permissions": [
         "users:manage_users"
       ]
@@ -118,6 +132,12 @@
       "entry": "views/login.php",
       "title": "Login",
       "public": true,
+      "hide_nav": true,
+      "navigable": false
+    },
+    "/change-password": {
+      "entry": "views/change_password.php",
+      "title": "Login",
       "hide_nav": true,
       "navigable": false
     },

@@ -24,6 +24,7 @@
 namespace DynamicSuite\Pkg\Users;
 use DynamicSuite\API\Response;
 use DynamicSuite\Database\Query;
+use DynamicSuite\Storable\Group;
 
 /**
  * Read the user
@@ -32,8 +33,10 @@ $user = (new Query())
     ->select([
         'user_id',
         'username',
+        'password_expired',
         'root',
         'inactive',
+        'inactive_by',
         'inactive_on',
         'login_last_attempt',
         'login_last_success',
@@ -53,26 +56,9 @@ if (!$user) {
 /**
  * Read the groups
  */
-$user['assigned_groups'] = [];
-$user['unassigned_groups'] = [];
-$assigned = (new Query())
-    ->select(['ds_groups.group_id', 'ds_groups.name'])
-    ->from('ds_users_groups')
-    ->join('ds_groups')
-    ->on('ds_groups.group_id', '=', 'ds_users_groups.group_id')
-    ->where('ds_users_groups.user_id', '=', $user['user_id'])
-    ->execute();
-$unassigned = (new Query())
-    ->select(['group_id', 'name'])
-    ->from('ds_groups')
-    ->execute();
-foreach ($unassigned as $value) {
-    $user['unassigned_groups'][$value['group_id']] = $value['name'];
-}
-foreach ($assigned as $value) {
-    unset($user['unassigned_groups'][$value['group_id']]);
-    $user['assigned_groups'][$value['group_id']] = $value['name'];
-}
+$groups = Group::readForComponent(null, $user['user_id']);
+$user['assigned_groups'] = $groups['assigned'];
+$user['unassigned_groups'] = $groups['unassigned'];
 
 /**
  * OK response

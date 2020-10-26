@@ -23,24 +23,17 @@
 
 namespace DynamicSuite\Pkg\Users;
 use DynamicSuite\API\Response;
-use DynamicSuite\Database\Query;
+use DynamicSuite\Storable\Permission;
 
 /**
  * Get permissions
  */
-$permissions = [
-    'assigned_permissions' => [],
-    'unassigned_permissions' => []
-];
-$unassigned = (new Query())
-    ->select(['permission_id', 'description'])
-    ->from('ds_permissions')
-    ->execute();
-foreach ($unassigned as $value) {
-    $permissions['unassigned_permissions'][$value['permission_id']] = $value['description'];
-}
+$permissions = Permission::readForComponent();
 
 /**
  * OK response
  */
-return new Response('OK', 'Success', $permissions);
+return new Response('OK', 'Success', [
+    'assigned_permissions' => $permissions['assigned'],
+    'unassigned_permissions' => $permissions['unassigned']
+]);

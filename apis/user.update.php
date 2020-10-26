@@ -85,6 +85,7 @@ $user->setInactive((bool) $_POST['inactive']);
 if ($_POST['password_1']) {
     $user->changePassword($_POST['password_1']);
 }
+$user->password_expired = (bool) $_POST['password_expired'];
 $user->update();
 
 /**
