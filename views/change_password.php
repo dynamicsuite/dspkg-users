@@ -1,6 +1,6 @@
 <?php
 /**
- * Read a permission group.
+ * Users view: Change a user password.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,42 +18,12 @@
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
  * @copyright 2020 Dynamic Suite Team
- * @noinspection PhpUnhandledExceptionInspection
+ * @noinspection PhpUnused
  */
 
 namespace DynamicSuite\Pkg\Users;
-use DynamicSuite\API\Response;
-use DynamicSuite\Database\Query;
-use DynamicSuite\Storable\Permission;
 
 /**
- * Read the group
+ * Render the component view.
  */
-$group = (new Query())
-    ->select([
-        'group_id',
-        'name',
-        'description'
-    ])
-    ->from('ds_groups')
-    ->where('group_id', '=', $_POST['id'])
-    ->execute(true);
-
-/**
- * Group not found
- */
-if (!$group) {
-    return new Response('NOT_FOUND', 'Group not found');
-}
-
-/**
- * Read permissions
- */
-$permissions = Permission::readForComponent(null, $group['group_id']);
-$group['assigned_permissions'] = $permissions['assigned'];
-$group['unassigned_permissions'] = $permissions['unassigned'];
-
-/**
- * OK response
- */
-return new Response('OK', 'Success', $group);
+Users::renderComponentView('change-password');

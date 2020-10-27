@@ -25,6 +25,7 @@ namespace DynamicSuite\Pkg\Users;
 use DynamicSuite\API\Response;
 use DynamicSuite\Database\Query;
 use DynamicSuite\Pkg\Aui\CrudRead;
+use DynamicSuite\Pkg\Time\Time;
 
 /**
  * Setup the list read.
@@ -33,7 +34,7 @@ $list = (new Query())
     ->select([
         'user_id AS id',
         'username AS title',
-        'IFNULL(CONCAT("Last login: ", login_last_success), "Never logged in") AS subtext'
+        'login_last_success AS subtext'
     ])
     ->from('ds_users');
 
@@ -43,6 +44,13 @@ $list = (new Query())
 $crud = (new CrudRead($list))
     ->searchColumns(['username'])
     ->execute();
+
+/**
+ * Format subtext
+ */
+foreach ($crud['list'] as $key => $value) {
+    $crud['list'][$key]['subtext'] = 'Last Login: ' . Time::timestamp($value['subtext']);
+}
 
 /**
  * Return the component data.

@@ -23,24 +23,17 @@
 
 namespace DynamicSuite\Pkg\Users;
 use DynamicSuite\API\Response;
-use DynamicSuite\Database\Query;
+use DynamicSuite\Storable\Group;
 
 /**
  * Get the groups
  */
-$user = [
-    'assigned_groups' => [],
-    'unassigned_groups' => []
-];
-$unassigned = (new Query())
-    ->select(['group_id', 'name'])
-    ->from('ds_groups')
-    ->execute();
-foreach ($unassigned as $value) {
-    $user['unassigned_groups'][$value['group_id']] = $value['name'];
-}
+$groups = Group::readForComponent();
 
 /**
  * OK response
  */
-return new Response('OK', 'Success', $user);
+return new Response('OK', 'Success', [
+    'assigned_groups' => $groups['assigned'],
+    'unassigned_groups' => $groups['unassigned']
+]);

@@ -48,6 +48,7 @@ final class Users
         'USER_CREATE' => 200,
         'USER_UPDATE' => 210,
         'USER_PASSWORD_RESET' => 215,
+        'USER_PASSWORD_CHANGE' => 216,
         'USER_DELETE' => 220,
         'GROUP_CREATE' => 300,
         'GROUP_UPDATE' => 310,

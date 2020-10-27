@@ -1,6 +1,6 @@
 <?php
 /**
- * Read a permission group.
+ * Get the current user and action link.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,38 +22,14 @@
  */
 
 namespace DynamicSuite\Pkg\Users;
-use DynamicSuite\API\Response;
-use DynamicSuite\Database\Query;
-use DynamicSuite\Storable\Permission;
+use DynamicSuite\Core\Request;
+use DynamicSuite\Core\Session;
 
 /**
- * Read the group
+ * Render the user and link
  */
-$group = (new Query())
-    ->select([
-        'group_id',
-        'name',
-        'description'
-    ])
-    ->from('ds_groups')
-    ->where('group_id', '=', $_POST['id'])
-    ->execute(true);
-
-/**
- * Group not found
- */
-if (!$group) {
-    return new Response('NOT_FOUND', 'Group not found');
+if (Session::$user_id) {
+    $href = 'href="/change-password?ref=' . Request::$url_string . '"';
+    $text = Session::$user_name;
+    echo "<a $href>Logged in as: $text</a>";
 }
-
-/**
- * Read permissions
- */
-$permissions = Permission::readForComponent(null, $group['group_id']);
-$group['assigned_permissions'] = $permissions['assigned'];
-$group['unassigned_permissions'] = $permissions['unassigned'];
-
-/**
- * OK response
- */
-return new Response('OK', 'Success', $group);
