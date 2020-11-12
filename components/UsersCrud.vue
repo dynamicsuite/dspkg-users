@@ -124,4 +124,7 @@ export default {
 .users.crud
     max-width: 1000px
 
+    .body > .aui.input:first-of-type
+        margin-bottom: 1rem
+
 </style>
