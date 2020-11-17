@@ -66,6 +66,14 @@ if ($user->user_id === Session::$user_id && $_POST['inactive']) {
 }
 
 /**
+ * Make sure the username is not in use
+ */
+$usage_check = User::readByUsername($_POST['username']);
+if ($usage_check && $usage_check->user_id !== $user->user_id) {
+    $errors['username'] = 'Username in use';
+}
+
+/**
  * Input validation failed
  */
 if ($errors) {

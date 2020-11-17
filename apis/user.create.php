@@ -47,6 +47,13 @@ $errors = (new CrudPostValidation())
     ->validate();
 
 /**
+ * Make sure the username is not in use
+ */
+if (User::readByUsername($_POST['username'])) {
+    $errors['username'] = 'Username in use';
+}
+
+/**
  * Password match failure
  */
 if ($_POST['password_1'] !== $_POST['password_2']) {

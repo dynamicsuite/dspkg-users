@@ -18,20 +18,20 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
 <template>
     <div class="groups crud">
-        <aui-crud v-bind="options">
+        <aui-crud v-bind="options" :form.sync="form" :feedback.sync="feedback" :calling.sync="calling">
             <template #list-title>Permission Groups</template>
-            <template #form="{ form, error, overlay }">
+            <template #form="{ overlay }">
                 <div class="col-2">
                     <aui-input
                         label="Name"
                         :disabled="overlay"
-                        :failure="error.name"
+                        :failure="feedback.name"
                         v-model="form.name"
                     />
                     <aui-input
                         label="Description"
                         :disabled="overlay"
-                        :failure="error.description"
+                        :failure="feedback.description"
                         v-model="form.description"
                     />
                 </div>
@@ -60,15 +60,20 @@ export default {
                 form_api_delete: 'group.delete',
                 form_storable_key: 'group_id',
                 form_delete_text: 'Are you sure you want to delete the group?',
-                fields: [
-                    'group_id',
-                    'name',
-                    'description',
-                    'assigned_permissions',
-                    'unassigned_permissions'
-                ],
                 views: ['form']
-            }
+            },
+            form: {
+                group_id: null,
+                name: null,
+                description: null,
+                assigned_permissions: null,
+                unassigned_permissions: null
+            },
+            feedback: {
+                name: null,
+                description: null
+            },
+            calling: false
         }
     }
 }

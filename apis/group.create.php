@@ -42,6 +42,13 @@ $errors = (new CrudPostValidation())
     ->validate();
 
 /**
+ * Make sure the name is not in use
+ */
+if (Group::readByName($_POST['name'])) {
+    $errors['name'] = 'Group name in use';
+}
+
+/**
  * Input validation failed
  */
 if ($errors) {
