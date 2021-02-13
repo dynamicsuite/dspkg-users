@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -32,7 +32,7 @@ use DynamicSuite\Pkg\Time\Time;
  */
 $list = (new Query())
     ->select([
-        'user_id AS id',
+        'user_id',
         'username AS title',
         'login_last_success AS subtext'
     ])
@@ -46,7 +46,7 @@ $crud = (new CrudRead($list))
     ->execute();
 
 /**
- * Format subtext
+ * Format subtext.
  */
 foreach ($crud['list'] as $key => $value) {
     $crud['list'][$key]['subtext'] = 'Last Login: ' . Time::timestamp($value['subtext']);

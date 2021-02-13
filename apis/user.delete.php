@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -29,46 +29,46 @@ use DynamicSuite\Storable\Event;
 use DynamicSuite\Storable\User;
 
 /**
- * Check if the user exists
+ * Check if the user exists.
  */
 if (!$user = User::readById($_POST['user_id'])) {
     return new Response('NOT_FOUND', 'User not found');
 }
 
 /**
- * Own account check
+ * Own account check.
  */
 if ($user->user_id === Session::$user_id) {
     return new Response('DELETE_PROTECT', 'Cannot delete your own account');
 }
 
 /**
- * Start a new database transaction
+ * Start a new database transaction.
  */
 DynamicSuite::$db->startTx();
 
 /**
- * delete the user
+ * delete the user.
  */
 $user->delete();
 
 /**
- * Log the event
+ * Log the event.
  */
 (new Event([
     'package_id' => 'users',
     'created_by' => Session::$user_name,
     'affected' => $user->username,
     'type' => Users::EVENTS['USER_DELETE'],
-    'message' => 'User deleted'
+    'event' => 'User deleted'
 ]))->create();
 
 /**
- * End the database transaction
+ * End the database transaction.
  */
 DynamicSuite::$db->endTx();
 
 /**
- * OK response
+ * OK response.
  */
 return new Response('OK', 'Success');

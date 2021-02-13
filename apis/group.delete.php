@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -29,39 +29,39 @@ use DynamicSuite\Storable\Event;
 use DynamicSuite\Storable\Group;
 
 /**
- * Check if the group exists
+ * Check if the group exists.
  */
 if (!$group = Group::readById($_POST['group_id'])) {
     return new Response('NOT_FOUND', 'Group not found');
 }
 
 /**
- * Start a new database transaction
+ * Start a new database transaction.
  */
 DynamicSuite::$db->startTx();
 
 /**
- * Delete the group
+ * Delete the group.
  */
 $group->delete();
 
 /**
- * Log the event
+ * Log the event.
  */
 (new Event([
     'package_id' => 'users',
     'created_by' => Session::$user_name,
     'affected' => $group->name,
     'type' => Users::EVENTS['GROUP_DELETE'],
-    'message' => 'Group deleted'
+    'event' => 'Group deleted'
 ]))->create();
 
 /**
- * End the database transaction
+ * End the database transaction.
  */
 DynamicSuite::$db->endTx();
 
 /**
- * OK response
+ * OK response.
  */
 return new Response('OK', 'Success');

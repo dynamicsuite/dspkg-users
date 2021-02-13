@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -26,12 +26,12 @@ use DynamicSuite\API\Response;
 use DynamicSuite\Storable\Group;
 
 /**
- * Get the groups
+ * Get the groups.
  */
 $groups = Group::readForComponent();
 
 /**
- * OK response
+ * OK response.
  */
 return new Response('OK', 'Success', [
     'assigned_groups' => $groups['assigned'],

@@ -1,6 +1,6 @@
 <!--
 Users Package
-Copyright (C) 2020 Dynamic Suite Team
+Copyright (C) 2021 Dynamic Suite Team
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,36 +17,50 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 -->
 
 <template>
-    <div class="users login">
-        <header v-if="application_header" v-html="application_header" />
-        <div class="container">
-            <div class="shadow">
+    <div class="dspkg-users login">
+        <div v-if="!error.server">
+            <h1 v-if="application_header">{{application_header}}</h1>
+            <div class="login-content aui aui-container primary">
                 <header>{{form_header}}</header>
-                <form onsubmit="return false;">
-                    <aui-input
-                        id="username"
-                        placeholder="Username"
-                        leading_cap="<i class='fas fa-user'></i>"
-                        :disable_autofill="false"
-                        :failure="error.form.username"
-                        v-model="form.username"
-                    />
-                    <aui-input
-                        placeholder="Password"
-                        type="password"
-                        leading_cap="<i class='fas fa-key'></i>"
-                        :disable_autofill="false"
-                        :failure="error.form.password"
-                        v-model="form.password"
-                    />
-                    <aui-button :loading="state.calling" loading_text="Logging in..." @click="login">Login</aui-button>
-                    <aui-alert type="failure" :visible="error.login" v-html="error.login" />
-                    <a v-if="register_href" :href="register_href">{{register_text}}</a>
-                    <a v-if="help_href" :href="help_href">{{help_text}}</a>
-                </form>
+                <aui-input
+                    id="username"
+                    placeholder="Username"
+                    leading_cap="<i class='fas fa-user'></i>"
+                    :failure="error.form.username"
+                    v-model="form.username"
+                    @keydown="handleKeydown"
+                />
+                <aui-input
+                    type="password"
+                    placeholder="Password"
+                    leading_cap="<i class='fas fa-key'></i>"
+                    :failure="error.form.password"
+                    v-model="form.password"
+                    @keydown="handleKeydown"
+                />
+                <aui-button
+                    text="Login"
+                    :loading="state.calling"
+                    loading_text="Logging in..."
+                    @click="login"
+                />
+                <a v-if="register_href" :href="register_href">{{register_text}}</a>
+                <a v-if="help_href" :href="help_href">{{help_text}}</a>
+                <aui-alert
+                    :text="error.login"
+                    :show="error.login"
+                    type="failure"
+                />
             </div>
             <footer v-if="footer">{{footer}}</footer>
         </div>
+        <aui-notice
+            v-else
+            type="failure"
+            icon="fas fa-exclamation-triangle"
+            text="A server error occurred"
+            subtext="Please refresh the page"
+        />
     </div>
 </template>
 
@@ -82,11 +96,22 @@ export default {
     methods: {
 
         /**
-         * Attempt to login the user
+         * Handle keydown events for hitting enter to login.
          *
-         * @return void
+         * @returns {undefined}
          */
-        login () {
+        handleKeydown(event) {
+            if (event.key === 'Enter') {
+                this.login();
+            }
+        },
+
+        /**
+         * Attempt to login the user.
+         *
+         * @returns {undefined}
+         */
+        login() {
             this.error.login = null;
             this.error.form.username = null;
             this.error.form.password = null;
@@ -128,7 +153,10 @@ export default {
             }
         }
         this.username_input = document.getElementById('username');
-        this.username_input.focus();
+        if (this.username_input) {
+            this.username_input = this.username_input.getElementsByTagName('input')[0];
+            this.username_input.focus();
+        }
     }
 }
 </script>
@@ -138,133 +166,100 @@ export default {
 /* Import the core DS colors */
 @import "../../../client/css/colors"
 
-/* Media query mixin for mobile view breakpoint */
-@mixin on-mobile-view
-    @media (max-width: 500px)
-        @content
-
-/* Media query mixin for ipad view breakpoint */
-@mixin on-ipad-view
-    @media (max-width: 768px)
-        @content
+/* Global CRUD width */
+.users-view
+    max-width: 1008px
 
 /* Login container */
-.users.login
+.dspkg-users.login
     display: flex
     flex-direction: column
     justify-content: center
     align-items: center
     text-align: center
-    width: 100vw
+    width: 100%
     height: 100vh
-    background: #d2d6de
-
-    /* Clear darker background on mobile */
-    @include on-mobile-view
-        background: whitesmoke
 
     /* Application header */
-    & > header
-        margin-bottom: 2rem
+    h1
         font-size: 1.5rem
-        font-weight: bold
 
-        @include on-mobile-view
+    /* Login form container */
+    .login-content
+        width: 18rem
+
+        /* Organization name header */
+        header
+            width: calc(100% + 2rem)
+            font-weight: bold
+            background: $primary
+            color: white
+            padding: 1rem 0
+            margin: -1rem 0 1rem -1rem
+            border-top-left-radius: 3px
+            border-top-right-radius: 3px
+
+        /* Space out form */
+        .aui.input
+            margin-bottom: 1rem
+
+            /* Pad caps and inputs */
+            .leading-cap, input
+                padding: 0.75rem
+
+            /* Square up caps */
+            .leading-cap i
+                width: 1rem
+                height: 1rem
+
+        /* Stretch the login button to the full form width */
+        .btn
+            width: 100%
+            padding: 0.75rem
+
+        /* Failed login notice*/
+        .alert
+            margin-top: 1rem
+            display: flex
+            justify-content: center
+
+    /* The login footer copyright */
+    footer
+        margin-top: -0.3rem
+        color: darken($text-muted, 20%)
+        font-size: 0.8rem
+
+    /* Mobile overrides */
+    @media (max-width: 500px)
+
+        /* Hide SOM header */
+        h1
             display: none
 
-    /* Login container */
-    .container
-        width: 22rem
-
-        /* Full height form on mobile */
-        @include on-mobile-view
+        /* Flex parent container */
+        & > div
             display: flex
-            align-items: stretch
             flex-direction: column
             width: 100%
             height: 100%
 
-        /* Shadow backdrop container */
-        .shadow
-            box-shadow: 0 0 12px -3px rgba(0, 0, 0, 0.47)
-            border-radius: 4px
+            /* Remove header radius */
+            header
+                border-radius: 0
 
-            /* Mobile shadow resets */
-            @include on-mobile-view
+            /* Form container overrides */
+            .login-content
+                width: calc(100% - 2rem)
+                flex-grow: 1
+                border: none
                 box-shadow: none
+                margin-bottom: 0
                 border-radius: 0
 
-        /* Form header */
-        header
-            font-weight: bold
-            background: $primary
-            color: white
-            padding: 1rem 1.5rem
-            border-radius: 4px 4px 0 0
-            margin: 0
-
-            @include on-mobile-view
-                border-radius: 0
-
-        /* The actual login form container */
-        form
-            background: whitesmoke
-            border-radius: 0 0 4px 4px
-            border-top: none
-            display: flex
-            flex-direction: column
-            padding: 1.5rem
-
-            /* Input margins */
-            .aui.input
-                margin-bottom: 1.5rem
-
-                /* Increase input padding*/
-                .leading-cap, input
-                    padding: 0.75rem
-
-                /* Fixed icons */
-                .leading-cap i
-                    width: 1rem
-                    height: 1rem
-
-            /* Login button padding */
-            .btn
-                padding: 0.75rem
-
-                /* Bottom padding when links are present */
-                &:not(:last-child)
-                    margin-bottom: 1.5rem
-
-            /* Login alert */
-            .alert
-                display: flex
-                justify-content: center
-                margin: 0
-
-            /* Action links*/
-            a
-                text-decoration: none
-                color: $primary
-                font-size: 0.9rem
-                padding: 0 1rem
-
-                &:hover
-                    text-decoration: underline
-
-                &:first-of-type:not(:last-of-type)
-                    margin-bottom: 0.25rem
-
-        /* Login footer/copyright */
+        /* Copyright footer overrides */
         footer
-            margin-top: 0.7rem
-            color: #777
-            font-size: 0.8rem
-            padding: 0 2rem
-
-            /* Move to bottom on mobile */
-            @include on-mobile-view
-                color: $text-muted
-                margin: auto 0 0.5rem 0
+            margin-top: auto
+            padding-bottom: 1rem
+            background: whitesmoke
 
 </style>

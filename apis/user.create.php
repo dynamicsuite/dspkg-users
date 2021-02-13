@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -31,7 +31,7 @@ use DynamicSuite\Storable\Event;
 use DynamicSuite\Storable\User;
 
 /**
- * Validate for length errors in the given data
+ * Validate for length errors in the given data.
  */
 $errors = (new CrudPostValidation())
     ->limits(User::COLUMN_LIMITS)
@@ -47,14 +47,14 @@ $errors = (new CrudPostValidation())
     ->validate();
 
 /**
- * Make sure the username is not in use
+ * Make sure the username is not in use.
  */
 if (User::readByUsername($_POST['username'])) {
     $errors['username'] = 'Username in use';
 }
 
 /**
- * Password match failure
+ * Password match failure.
  */
 if ($_POST['password_1'] !== $_POST['password_2']) {
     $errors['password_1'] = 'Passwords do not match';
@@ -62,19 +62,19 @@ if ($_POST['password_1'] !== $_POST['password_2']) {
 }
 
 /**
- * Input validation failed
+ * Input validation failed.
  */
 if ($errors) {
     return new Response('INPUT_ERROR', 'Input validation error', $errors);
 }
 
 /**
- * Start a new database transaction
+ * Start a new database transaction.
  */
 DynamicSuite::$db->startTx();
 
 /**
- * Create the user
+ * Create the user.
  */
 $user = new User();
 $user->username = $_POST['username'];
@@ -84,7 +84,7 @@ $user->password_expired = (bool) $_POST['password_expired'];
 $user->create();
 
 /**
- * Add the groups
+ * Add the groups.
  */
 $group_insert = [];
 foreach ($_POST['assigned_groups'] as $group_id => $name) {
@@ -102,22 +102,22 @@ if ($group_insert) {
 
 
 /**
- * Log the event
+ * Log the event.
  */
 (new Event([
     'package_id' => 'users',
     'created_by' => Session::$user_name,
     'affected' => $user->username,
     'type' => Users::EVENTS['USER_CREATE'],
-    'message' => 'User created'
+    'event' => 'User created'
 ]))->create();
 
 /**
- * End the database transaction
+ * End the database transaction.
  */
 DynamicSuite::$db->endTx();
 
 /**
- * OK response
+ * OK response.
  */
 return new Response('OK', 'Success', $user->user_id);

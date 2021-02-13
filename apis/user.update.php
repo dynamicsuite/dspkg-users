@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -31,14 +31,14 @@ use DynamicSuite\Storable\Event;
 use DynamicSuite\Storable\User;
 
 /**
- * Check if the user exists
+ * Check if the user exists.
  */
 if (!$user = User::readById($_POST['user_id'])) {
     return new Response('NOT_FOUND', 'User not found');
 }
 
 /**
- * Validate for length errors in the given data
+ * Validate for length errors in the given data.
  */
 $errors = (new CrudPostValidation())
     ->limits(User::COLUMN_LIMITS)
@@ -48,7 +48,7 @@ $errors = (new CrudPostValidation())
     ->validate();
 
 /**
- * Password match failure
+ * Password match failure.
  */
 if ($_POST['password_1'] && $_POST['password_1'] !== $_POST['password_2']) {
     $errors['password_1'] = 'Passwords do not match';
@@ -59,14 +59,14 @@ if ($_POST['password_1'] && $_POST['password_1'] !== $_POST['password_2']) {
 }
 
 /**
- * Own account check
+ * Own account check.
  */
 if ($user->user_id === Session::$user_id && $_POST['inactive']) {
     $errors['inactive'] = 'Cannot deactivate your own account';
 }
 
 /**
- * Make sure the username is not in use
+ * Make sure the username is not in use.
  */
 $usage_check = User::readByUsername($_POST['username']);
 if ($usage_check && $usage_check->user_id !== $user->user_id) {
@@ -74,19 +74,19 @@ if ($usage_check && $usage_check->user_id !== $user->user_id) {
 }
 
 /**
- * Input validation failed
+ * Input validation failed.
  */
 if ($errors) {
     return new Response('INPUT_ERROR', 'Input validation error', $errors);
 }
 
 /**
- * Start a new database transaction
+ * Start a new database transaction.
  */
 DynamicSuite::$db->startTx();
 
 /**
- * Update the user
+ * Update the user.
  */
 $user->username = $_POST['username'];
 $user->setInactive((bool) $_POST['inactive']);
@@ -97,7 +97,7 @@ $user->password_expired = (bool) $_POST['password_expired'];
 $user->update();
 
 /**
- * Add the groups
+ * Add the groups.
  */
 $group_insert = [];
 foreach ($_POST['assigned_groups'] as $group_id => $name) {
@@ -119,22 +119,22 @@ if ($group_insert) {
 }
 
 /**
- * Log the event
+ * Log the event.
  */
 (new Event([
     'package_id' => 'users',
     'created_by' => Session::$user_name,
     'affected' => $user->username,
     'type' => Users::EVENTS['USER_UPDATE'],
-    'message' => 'User update'
+    'event' => 'User update'
 ]))->create();
 
 /**
- * End the database transaction
+ * End the database transaction.
  */
 DynamicSuite::$db->endTx();
 
 /**
- * OK response
+ * OK response.
  */
 return new Response('OK', 'Success');

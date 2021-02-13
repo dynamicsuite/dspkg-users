@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -27,7 +27,7 @@ use DynamicSuite\Database\Query;
 use DynamicSuite\Storable\Permission;
 
 /**
- * Read the group
+ * Read the group.
  */
 $group = (new Query())
     ->select([
@@ -36,24 +36,24 @@ $group = (new Query())
         'description'
     ])
     ->from('ds_groups')
-    ->where('group_id', '=', $_POST['id'])
+    ->where('group_id', '=', $_POST['group_id'])
     ->execute(true);
 
 /**
- * Group not found
+ * Group not found.
  */
 if (!$group) {
     return new Response('NOT_FOUND', 'Group not found');
 }
 
 /**
- * Read permissions
+ * Read permissions.
  */
 $permissions = Permission::readForComponent(null, $group['group_id']);
 $group['assigned_permissions'] = $permissions['assigned'];
 $group['unassigned_permissions'] = $permissions['unassigned'];
 
 /**
- * OK response
+ * OK response.
  */
 return new Response('OK', 'Success', $group);

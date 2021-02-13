@@ -1,6 +1,6 @@
 <!--
 Users Package
-Copyright (C) 2020 Dynamic Suite Team
+Copyright (C) 2021 Dynamic Suite Team
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,13 +17,37 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 -->
 
 <template>
-    <div class="users change-password">
-        <div v-if="!error.server" class="ds-container">
+    <div class="dspkg-users change-password">
+        <div v-if="!error.server" class="aui aui-container primary">
             <h3>Update Account Password</h3>
-            <aui-input type="password" label="Password" :failure="error.password" v-model="form.password_1" />
-            <aui-input type="password" label="Confirm Password" :failure="error.password" v-model="form.password_2" />
-            <aui-button @click="changePassword" :loading="state.calling" loading_text="Updating...">Update</aui-button>
+            <aui-input
+                type="password"
+                label="Password"
+                autocomplete="chrome-off"
+                :failure="error.password"
+                v-model="form.password_1"
+            />
+            <aui-input
+                type="password"
+                label="Confirm Password"
+                autocomplete="chrome-off"
+                :failure="error.password"
+                v-model="form.password_2"
+            />
+            <aui-button
+                text="Update Password"
+                :loading="state.calling"
+                loading_text="Updating..."
+                @click="changePassword"
+            />
         </div>
+        <aui-notice
+            v-else
+            type="failure"
+            icon="fas fa-exclamation-triangle"
+            text="A server error occurred"
+            subtext="Please refresh the page"
+        />
     </div>
 </template>
 
@@ -48,6 +72,12 @@ export default {
         }
     },
     methods: {
+
+        /**
+         * Change the user's password.
+         *
+         * @returns {undefined}
+         */
         changePassword () {
             this.state.calling = true;
             this.error.password = null;
@@ -70,13 +100,14 @@ export default {
             });
         }
     }
+
 }
 </script>
 
 <style lang="sass">
 
 /* Change password container */
-.users.change-password
+.dspkg-users.change-password
     width: 100vw
     height: 100vh
     display: flex

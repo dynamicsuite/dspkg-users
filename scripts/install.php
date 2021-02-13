@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnused
  */
 
@@ -36,7 +36,9 @@ require_once __DIR__  . '/../../../lib/DynamicSuite/Util/CLI.php';
 require_once __DIR__  . '/../../../lib/DynamicSuite/Core/GlobalConfig.php';
 require_once __DIR__  . '/../../../lib/DynamicSuite/Core/Config.php';
 
-// Get configs
+/**
+ * Get the config.
+ */
 $cfg = new Config('dynamicsuite');
 
 $db_host = CLI::splitDSN($cfg->db_dsn, 'host');

@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnused
  */
 
@@ -31,7 +31,7 @@ use Exception;
 use PDOException;
 
 /**
- * Create the instance
+ * Create the instance.
  */
 require_once realpath(__DIR__ . '/../../../scripts/create_instance.php');
 
@@ -60,7 +60,7 @@ function getInputAndCheckLength(string $prompt, string $key)
 }
 
 /**
- * Confirmation prompt
+ * Confirmation prompt.
  */
 CLI::out('This script creates a root user. Root users bypass all permissions.');
 CLI::out('You should only use this for making a account that you will use to make other accounts withing the GUI.');
@@ -69,7 +69,7 @@ if (!CLI::yn('I understand, proceed with creating user.')) {
 }
 
 /**
- * Create the user
+ * Create the user.
  */
 $user = new User();
 $user->root = true;
@@ -108,7 +108,8 @@ try {
         'created_by' => Session::$user_name,
         'affected' => $user->username,
         'type' => Users::EVENTS['USER_CREATE'],
-        'message' => 'User created'
+        'event' => 'User created',
+        'message' => 'CLI initiated'
     ]))->create();
     DynamicSuite::$db->endTx();
 } catch (Exception | PDOException $exception) {
