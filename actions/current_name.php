@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -26,7 +26,7 @@ use DynamicSuite\Core\Request;
 use DynamicSuite\Core\Session;
 
 /**
- * Render the user and link
+ * Render the user and link.
  */
 if (Session::$user_id) {
     $href = 'href="/change-password?ref=' . Request::$url_string . '"';

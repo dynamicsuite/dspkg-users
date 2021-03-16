@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -31,7 +31,7 @@ use Exception;
 use PDOException;
 
 /**
- * Create the instance
+ * Create the instance.
  */
 require_once realpath(__DIR__ . '/../../../scripts/create_instance.php');
 
@@ -53,9 +53,11 @@ while (1) {
     CLI::out('');
     if ($user_password_1 !== $user_password_2) {
         CLI::err('Passwords do not match', false);
+        continue;
     }
     if (mb_strlen($user_password_1) < Users::$cfg->password_min_length) {
         CLI::err('Password too short', false);
+        continue;
     }
     break;
 }
@@ -68,7 +70,8 @@ try {
         'created_by' => Session::$user_name,
         'affected' => $user->username,
         'type' => Users::EVENTS['USER_PASSWORD_RESET'],
-        'message' => 'User password reset'
+        'event' => 'User password reset',
+        'message' => 'CLI initiated'
     ]))->create();
     DynamicSuite::$db->endTx();
     CLI::out('Password changed');

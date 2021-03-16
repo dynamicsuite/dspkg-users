@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -29,67 +29,67 @@ use DynamicSuite\Storable\Event;
 use DynamicSuite\Storable\User;
 
 /**
- * Make sure the user is valid
+ * Make sure the user is valid.
  */
 if (!$user = User::readById(Session::$user_id)) {
     return new Response('BAD_USER', 'Invalid user account');
 }
 
 /**
- * Password empty
+ * Password empty.
  */
 if (empty($_POST['password_1'])) {
     return new Response('BAD_PASSWORD', 'Password empty');
 }
 
 /**
- * Do not match
+ * Do not match.
  */
 if ($_POST['password_1'] !== $_POST['password_2']) {
     return new Response('BAD_PASSWORD', 'Passwords do not match');
 }
 
 /**
- * Too short
+ * Too short.
  */
 if (mb_strlen($_POST['password_1']) < Users::$cfg->password_min_length) {
     return new Response('BAD_PASSWORD', 'Password too short');
 }
 
 /**
- * Change the password
+ * Change the password.
  */
 $user->changePassword($_POST['password_1']);
 $user->password_expired = false;
 
 /**
- * Begin a new transaction
+ * Begin a new transaction.
  */
 DynamicSuite::$db->startTx();
 
 /**
- * Update the user
+ * Update the user.
  */
 $user->update();
 
 /**
- * Log the event
+ * Log the event.
  */
 (new Event([
     'package_id' => 'users',
     'created_by' => Session::$user_name,
     'affected' => $user->username,
     'type' => Users::EVENTS['USER_LOGIN'],
-    'message' => 'Password changed by user'
+    'event' => 'Password changed by user'
 ]))->create();
 
 
 /**
- * Complete the transaction
+ * Complete the transaction.
  */
 DynamicSuite::$db->endTx();
 
 /**
- * OK response
+ * OK response.
  */
 return new Response('OK', 'Success');

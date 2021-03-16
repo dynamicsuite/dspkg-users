@@ -67,7 +67,7 @@
     },
     "user.read": {
       "entry": "apis/user.read.php",
-      "post": ["id"],
+      "post": ["user_id"],
       "permissions": [
         "users:manage_users"
       ]
@@ -107,7 +107,7 @@
     },
     "group.read": {
       "entry": "apis/group.read.php",
-      "post": ["id"],
+      "post": ["group_id"],
       "permissions": [
         "users:manage_groups"
       ]
@@ -137,7 +137,7 @@
     },
     "/change-password": {
       "entry": "views/change_password.php",
-      "title": "Login",
+      "title": "Change Password",
       "hide_nav": true,
       "navigable": false
     },

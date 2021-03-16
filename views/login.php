@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnused
  */
 
@@ -26,12 +26,12 @@ use DynamicSuite\Core\Session;
 use DynamicSuite\Core\View;
 
 /**
- * Destroy the old session
+ * Destroy the old session.
  */
 Session::destroy();
 
 /**
- * Set the page data for the component
+ * Set the page data for the component.
  */
 View::setPageData([
     'application_header' => Users::$cfg->login_application_header,

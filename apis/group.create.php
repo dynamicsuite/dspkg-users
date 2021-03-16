@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -31,7 +31,7 @@ use DynamicSuite\Storable\Event;
 use DynamicSuite\Storable\Group;
 
 /**
- * Validate for length errors in the given data
+ * Validate for length errors in the given data.
  */
 $errors = (new CrudPostValidation())
     ->limits(Group::COLUMN_LIMITS)
@@ -42,26 +42,26 @@ $errors = (new CrudPostValidation())
     ->validate();
 
 /**
- * Make sure the name is not in use
+ * Make sure the name is not in use.
  */
 if (Group::readByName($_POST['name'])) {
     $errors['name'] = 'Group name in use';
 }
 
 /**
- * Input validation failed
+ * Input validation failed.
  */
 if ($errors) {
     return new Response('INPUT_ERROR', 'Input validation error', $errors);
 }
 
 /**
- * Start a new database transaction
+ * Start a new database transaction.
  */
 DynamicSuite::$db->startTx();
 
 /**
- * Create the group
+ * Create the group.
  */
 $group = new Group();
 $group->name = $_POST['name'];
@@ -69,7 +69,7 @@ $group->description = $_POST['description'];
 $group->create();
 
 /**
- * Add the permissions
+ * Add the permissions.
  */
 $permission_insert = [];
 foreach ($_POST['assigned_permissions'] as $permission_id => $name) {
@@ -86,22 +86,22 @@ if ($permission_insert) {
 }
 
 /**
- * Log the event
+ * Log the event.
  */
 (new Event([
     'package_id' => 'users',
     'created_by' => Session::$user_name,
     'affected' => $group->name,
     'type' => Users::EVENTS['GROUP_CREATE'],
-    'message' => 'Group created'
+    'event' => 'Group created'
 ]))->create();
 
 /**
- * End the database transaction
+ * End the database transaction.
  */
 DynamicSuite::$db->endTx();
 
 /**
- * OK response
+ * OK response.
  */
 return new Response('OK', 'Success', $group->group_id);

@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -27,7 +27,7 @@ use DynamicSuite\Database\Query;
 use DynamicSuite\Storable\Group;
 
 /**
- * Read the user
+ * Read the user.
  */
 $user = (new Query())
     ->select([
@@ -43,24 +43,24 @@ $user = (new Query())
         'login_last_ip'
     ])
     ->from('ds_users')
-    ->where('user_id', '=', $_POST['id'])
+    ->where('user_id', '=', $_POST['user_id'])
     ->execute(true);
 
 /**
- * User not found
+ * User not found.
  */
 if (!$user) {
     return new Response('NOT_FOUND', 'User not found');
 }
 
 /**
- * Read the groups
+ * Read the groups.
  */
 $groups = Group::readForComponent(null, $user['user_id']);
 $user['assigned_groups'] = $groups['assigned'];
 $user['unassigned_groups'] = $groups['unassigned'];
 
 /**
- * OK response
+ * OK response.
  */
 return new Response('OK', 'Success', $user);

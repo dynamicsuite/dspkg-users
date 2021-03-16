@@ -17,10 +17,13 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnused
  */
 
 namespace DynamicSuite\Pkg\Users;
 
+/**
+ * Initialize the package.
+ */
 Users::init();

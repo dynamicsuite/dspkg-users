@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -28,7 +28,7 @@ use DynamicSuite\Storable\Event;
 use DynamicSuite\Storable\User;
 
 /**
- * Generic response for invalid credentials
+ * Generic response for invalid credentials.
  */
 $generic_response = new Response('CREDENTIAL', 'Invalid username or password', [
     'username' => 'Invalid username or password',
@@ -36,21 +36,21 @@ $generic_response = new Response('CREDENTIAL', 'Invalid username or password', [
 ]);
 
 /**
- * Look for the user
+ * Look for the user.
  */
 if (!$user = User::readByUsername($_POST['username'])) {
     return $generic_response;
 }
 
 /**
- * User is inactive
+ * User is inactive.
  */
 elseif ($user->inactive) {
     return new Response('LOGIN', 'Account Inactive');
 }
 
 /**
- * User is locked out from too many login attempts
+ * User is locked out from too many login attempts.
  */
 elseif (
     $user->login_attempts > Users::$cfg->login_max_attempts &&
@@ -62,17 +62,17 @@ elseif (
 }
 
 /**
- * Try to log in the user
+ * Try to log in the user.
  */
 elseif ($user->login($_POST['password'])) {
 
     /**
-     * Create a new session for the user and set some current values
+     * Create a new session for the user and set some current values.
      */
     Session::create($user->user_id);
 
     /**
-     * Figure out where to redirect the user to since their login succeeded
+     * Figure out where to redirect the user to since their login succeeded.
      */
     if ($user->password_expired) {
         $location = '/change-password';
@@ -86,25 +86,25 @@ elseif ($user->login($_POST['password'])) {
     }
 
     /**
-     * Log the event
+     * Log the event.
      */
     (new Event([
         'package_id' => 'users',
         'created_by' => Session::$user_name,
         'affected' => $user->username,
         'type' => Users::EVENTS['USER_LOGIN'],
-        'message' => 'User login'
+        'event' => 'User login'
     ]))->create();
 
     /**
-     * OK response
+     * OK response.
      */
     return new Response('OK', 'Login successful', $location);
 
 }
 
 /**
- * Login failed due to bad credentials
+ * Login failed due to bad credentials.
  */
 else {
     return $generic_response;

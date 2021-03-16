@@ -17,7 +17,7 @@
  *
  * @package Users
  * @author Grant Martin <commgdog@gmail.com>
- * @copyright 2020 Dynamic Suite Team
+ * @copyright 2021 Dynamic Suite Team
  * @noinspection PhpUnhandledExceptionInspection
  */
 
@@ -31,7 +31,7 @@ use DynamicSuite\Pkg\Aui\CrudRead;
  */
 $list = (new Query())
     ->select([
-        'group_id AS id',
+        'group_id',
         'name AS title',
         'description AS subtext'
     ])
